@@ -68,7 +68,10 @@ This project is meant to be a jumping off point for an ongoing model used by an 
 5. If deploying using fly.io, all you need to do is `fly deploy` in the terminal to deploy the new application model.
 6. Run some test queries on the production server (e.g. using Postman).
 
-In this case, I have not set up a separate fly.io test server to delpoy to. Typically, this would be done before step 5 above.
+## Things to add
+- In this case, I have not set up a separate fly.io test server to delpoy to. Typically, this would be done before step 5 above.
+- We would want to implement proper logging in this deployment. That may require setting up a log store in fly.io.
+- The `apy.yml` file only documents the main endpoint, but typically all of them would be documented there.
 
 # Where to find this model
 
