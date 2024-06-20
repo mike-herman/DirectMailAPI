@@ -1,6 +1,7 @@
 ---
 title: Direct Mail API
 author: Michael Herman
+date: 2024-06-20
 ---
 # Direct Mail Predictive Model API
 
@@ -22,6 +23,7 @@ The following tools are used in this app:
   - It automatically creates a `/docs` endpoint with nice documentation of the contents.
 - The code utilizes the [pydantic](https://pydantic.dev/) framework.
 - The model itself is developed in the project and consists of a pickled `sklearn` model.
+- While not shown in this project, I use Postman to check both local and production APIs.
 
 # Project Organization
 
@@ -35,3 +37,53 @@ Here's how the project is organized. Feel free to browse.
   - `model_store` contains the pickled models. The models are named after the version strings specified in the API. So if the API request specifies model "v0.0" then it will use the model saved to the file `models/model_store/v0.0`.
 - `tets` is a test directory. It includes a file with a standard JSON request.
 - The rest of the files are various configs.
+
+# Where to find this model
+
+This model is live!
+
+You can see the API documentation at [https://directmailapi.fly.dev/docs](https://directmailapi.fly.dev/docs).
+
+Or you can query the API itself in the terminal using the code below.
+
+```
+curl --location 'https://directmailapi.fly.dev/dm_response_predict/' \
+--header 'Content-Type: application/json' \
+--data '{
+    "lead": {
+        "BALANCE": 3383.75,
+        "OCCUPATION": "SELF-EMP",
+        "SCR": 776,
+        "HOLDING_PERIOD": 30,
+        "ACC_TYPE": "SA",
+        "LEN_OF_RLTN_IN_MNTH": 146,
+        "NO_OF_L_CR_TXNS": 7,
+        "NO_OF_L_DR_TXNS": 3,
+        "NO_OF_BR_CSH_WDL_DR_TXNS": 0,
+        "NO_OF_ATM_DR_TXNS": 1,
+        "NO_OF_NET_DR_TXNS": 2,
+        "NO_OF_MOB_DR_TXNS": 0,
+        "NO_OF_CHQ_DR_TXNS": 0,
+        "FLG_HAS_CC": 0,
+        "AMT_ATM_DR": 13100,
+        "AMT_BR_CSH_WDL_DR": 0,
+        "AMT_CHQ_DR": 0,
+        "AMT_NET_DR": 973557.0,
+        "AMT_MOB_DR": 0,
+        "AMT_L_DR": 986657.0,
+        "FLG_HAS_ANY_CHGS": 0,
+        "AMT_OTH_BK_ATM_USG_CHGS": 0,
+        "AMT_MIN_BAL_NMC_CHGS": 0,
+        "NO_OF_IW_CHQ_BNC_TXNS": 0,
+        "NO_OF_OW_CHQ_BNC_TXNS": 0,
+        "AVG_AMT_PER_ATM_TXN": 13100.0,
+        "AVG_AMT_PER_CSH_WDL_TXN": 0.0,
+        "AVG_AMT_PER_CHQ_TXN": 0.0,
+        "AVG_AMT_PER_NET_TXN": 486778.5,
+        "AVG_AMT_PER_MOB_TXN": 0.0,
+        "FLG_HAS_NOMINEE": 1,
+        "FLG_HAS_OLD_LOAN": 1
+    },
+    "version": "v0.0"
+}'
+```
