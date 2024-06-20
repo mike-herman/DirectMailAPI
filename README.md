@@ -38,6 +38,30 @@ Here's how the project is organized. Feel free to browse.
 - `tets` is a test directory. It includes a file with a standard JSON request.
 - The rest of the files are various configs.
 
+# The predictive model
+This was developed off of a Kaggle data set on direct mail. It is one of a few data sets I keep around for general use. You can read more about it and see field definitions [here](https://github.com/mike-herman/credit_datasets). This is a pretty clean dataset to begin with, so cleaning and imputing missing fields wasn't necessary. In most cases though, we would expect to have incomplete information that would require imputation. That would be built into the model.
+
+To make the scenario and analysis more realistic, I madee some assumptions about the costs and benefits. Specifically, I assumed a single direct mailer costs $1 to send and that the average present value of a loan's cashflows is $1,900. When fitting the model, I chose not to use a standard utility metric and instead to explicitly maximize the economic profit. This is done by defining a custom scoring function:
+```
+def direct_mail_score_func(y_true, y_proba):
+    """ Expected profit from campaign.
+
+    This uses the probability of response to calculate the mail cost and origination value.
+    It return sthe expected profit from the campaign.
+    """
+    mail_cost = y_proba.sum() * -1
+    origination_value = (y_proba * y_true).sum() * 380
+    return origination_value - mail_cost
+
+direct_mail_score = make_scorer(direct_mail_score_func,greater_is_better=True,response_method="predict_proba")
+```
+
+I used an `xgboost` classifier as a model because it tends to work pretty well out-of-the-box. For the first version, I chose not to do further feature engineering.
+
+Despite not explicitly using `auc` as a scoring metric, the model had a fairly high AUC score of 91%. On a test set of 4,000 data points, the model would select 7.2% of individuals to target and would expect a 92.7% response rate. This would leave out 264 individuals who _would have_ responded if mailed. But lowering our targeting threshold to capture those individuals would require sending more mailers than we would recoup in expected profit.
+
+You can read more about the model development in the `models/notebooks/model_notebook.ipynb` file.
+
 # Where to find this model
 
 This model is live!
