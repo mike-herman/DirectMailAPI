@@ -1,0 +1,227 @@
+openapi: '3.0.2'
+info:
+  title: GFLOServer
+  version: '0.1'
+servers:
+  - url: http://localhost:8000/
+    description: Local server
+paths:
+  
+  /test:
+    post:
+      summary: Test
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                echo:
+                  type: string
+                  example: 'hello'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  test_input:
+                    type: string
+                    example: 'hello'
+                  test_output:
+                    type: string
+                    example: 'hello yourself'
+  
+  /dm_response_predict:
+    description: Returns the probability of a response for a direct mail campaign.
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lead:
+                  $ref: '#/components/schemas/Lead'
+                version:
+                  type: string
+                  enum:
+                    - v0.0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lead:
+                    $ref: '#/components/schemas/Lead'
+                  prediction:
+                    $ref: '#/components/schemas/Prediction'
+
+
+components:
+  schemas:
+    Lead:
+      type: object
+      description: An instance of a customer. Data follows the format of the [Kaggle Personal Loan Direct Mail Cross-sell Dataset](https://github.com/mike-herman/credit_datasets).
+      required:
+        - BALANCE
+        - OCCUPATION
+        - SCR
+        - HOLDING_PERIOD
+        - ACC_TYPE
+        - LEN_OF_RLTN_IN_MNTH
+        - NO_OF_L_CR_TXNS
+        - NO_OF_L_DR_TXNS
+        - NO_OF_BR_CSH_WDL_DR_TXNS
+        - NO_OF_ATM_DR_TXNS
+        - NO_OF_NET_DR_TXNS
+        - NO_OF_MOB_DR_TXNS
+        - NO_OF_CHQ_DR_TXNS
+        - FLG_HAS_CC
+        - AMT_ATM_DR
+        - AMT_BR_CSH_WDL_DR
+        - AMT_CHQ_DR
+        - AMT_NET_DR
+        - AMT_MOB_DR
+        - AMT_L_DR
+        - FLG_HAS_ANY_CHGS
+        - AMT_OTH_BK_ATM_USG_CHGS
+        - AMT_MIN_BAL_NMC_CHGS
+        - NO_OF_IW_CHQ_BNC_TXNS
+        - NO_OF_OW_CHQ_BNC_TXNS
+        - AVG_AMT_PER_ATM_TXN
+        - AVG_AMT_PER_CSH_WDL_TXN
+        - AVG_AMT_PER_CHQ_TXN
+        - AVG_AMT_PER_NET_TXN
+        - AVG_AMT_PER_MOB_TXN
+        - FLG_HAS_NOMINEE
+        - FLG_HAS_OLD_LOAN
+      properties:
+        BALANCE:
+          type: number
+          minimum: 0
+        OCCUPATION:
+            type: string
+            enum:
+              - SELF-EMP
+              - SAL
+              - PROF
+              - SENP
+        SCR:
+            type: number
+            minimum: 100
+            maximum: 999
+        HOLDING_PERIOD:
+            type: number
+            minimum: 0
+        ACC_TYPE:
+            type: string
+            enum:
+              - SA
+              - CA
+        LEN_OF_RLTN_IN_MNTH:
+            type: number
+            minimum: 0
+        NO_OF_L_CR_TXNS:
+            type: number
+            minimum: 0
+        NO_OF_L_DR_TXNS:
+            type: number
+            minimum: 0
+        NO_OF_BR_CSH_WDL_DR_TXNS:
+            type: number
+            minimum: 0
+        NO_OF_ATM_DR_TXNS:
+            type: number
+            minimum: 0
+        NO_OF_NET_DR_TXNS:
+            type: number
+            minimum: 0
+        NO_OF_MOB_DR_TXNS:
+            type: number
+            minimum: 0
+        NO_OF_CHQ_DR_TXNS:
+            type: number
+            minimum: 0
+        FLG_HAS_CC:
+            type: integer
+            minimum: 0
+            maximum: 1
+        AMT_ATM_DR:
+            type: number
+            minimum: 0
+        AMT_BR_CSH_WDL_DR:
+            type: number
+            minimum: 0
+        AMT_CHQ_DR:
+            type: number
+            minimum: 0
+        AMT_NET_DR:
+            type: number
+            minimum: 0
+        AMT_MOB_DR:
+            type: number
+            minimum: 0
+        AMT_L_DR:
+            type: number
+            minimum: 0
+        FLG_HAS_ANY_CHGS:
+            type: integer
+            minimum: 0
+            maximum: 1
+        AMT_OTH_BK_ATM_USG_CHGS:
+            type: number
+            minimum: 0
+        AMT_MIN_BAL_NMC_CHGS:
+            type: number
+            minimum: 0
+        NO_OF_IW_CHQ_BNC_TXNS:
+            type: number
+            minimum: 0
+        NO_OF_OW_CHQ_BNC_TXNS:
+            type: number
+            minimum: 0
+        AVG_AMT_PER_ATM_TXN:
+            type: number
+            minimum: 0
+        AVG_AMT_PER_CSH_WDL_TXN:
+            type: number
+            minimum: 0
+        AVG_AMT_PER_CHQ_TXN:
+            type: number
+            minimum: 0
+        AVG_AMT_PER_NET_TXN:
+            type: number
+            minimum: 0
+        AVG_AMT_PER_MOB_TXN:
+            type: number
+            minimum: 0
+        FLG_HAS_NOMINEE:
+            type: integer
+            minimum: 0
+            maximum: 1
+        FLG_HAS_OLD_LOAN:
+            type: integer
+            minimum: 0
+            maximum: 1
+    Prediction:
+      type: object
+      required: ['predict_flag','probability']
+      properties:
+        version:
+          type: string
+          enum:
+            - v0.0
+        predict_flag:
+          type: integer
+          minimum: 0
+          maximum: 1
+        probability:
+          type: number
+          minimum: 0
+          maximum: 1
