@@ -12,6 +12,11 @@ class Item(BaseModel):
 
 app = FastAPI()
 
+@app.get("/healthcheck")
+def read_root():
+    return {"status": "ok"}
+
+
 @app.post("/item/")
 def create_item(item: Item):
     return item
