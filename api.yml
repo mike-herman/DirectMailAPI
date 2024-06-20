@@ -1,38 +1,13 @@
 openapi: '3.0.2'
 info:
-  title: GFLOServer
+  title: DirectMailAPI
   version: '0.1'
 servers:
   - url: http://localhost:8000/
-    description: Local server
+    description: Local development server.
+  - url: https://directmailapi.fly.dev/
+    description: Production server.
 paths:
-  
-  /test:
-    post:
-      summary: Test
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                echo:
-                  type: string
-                  example: 'hello'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  test_input:
-                    type: string
-                    example: 'hello'
-                  test_output:
-                    type: string
-                    example: 'hello yourself'
   
   /dm_response_predict:
     description: Returns the probability of a response for a direct mail campaign.

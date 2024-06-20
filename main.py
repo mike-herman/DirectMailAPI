@@ -12,14 +12,21 @@ class Item(BaseModel):
 
 app = FastAPI()
 
+@app.get("/")
+def hello():
+    hello_dict = {
+        "endpoints": {
+            "/": "This page.",
+            "/healthcheck": "Returns the status of the API.",
+            "/dm_response_predict": "Accepts a JSON payload and returns the prediction results.",
+            "/docs" : "Provides documentation for the API.",
+        }
+    }
+    return hello_dict
+
 @app.get("/healthcheck")
 def read_root():
     return {"status": "ok"}
-
-
-@app.post("/item/")
-def create_item(item: Item):
-    return item
 
 @app.post("/dm_response_predict/")
 def predict_response(dm_prediction_request: DM_Prediction_Request):
