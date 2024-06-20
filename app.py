@@ -1,8 +1,8 @@
 # pip install fastapi
 from fastapi import FastAPI
 from pydantic import BaseModel
-from main.DataModel import DM_Prediction_Request, DM_Prediction_Response, Prediction
-from main.ServeModel import get_prediction
+from src.data_model import DM_Prediction_Request, DM_Prediction_Response, Prediction
+from src.serve_model import get_prediction
 
 class Item(BaseModel):
     name: str
@@ -18,8 +18,6 @@ def create_item(item: Item):
 
 @app.post("/dm_response_predict/")
 def predict_response(dm_prediction_request: DM_Prediction_Request):
-    # test_prediction = Prediction(**{"predict_flag":1,"probability":0.71, "version":"v0.0"})
-    # test_response = DM_Prediction_Response(**{"lead":dm_prediction_request.lead, "prediction":test_prediction})
     version_string = dm_prediction_request.version
     lead_instance = dm_prediction_request.lead
     predict_flag, probability = get_prediction(lead_instance, version_string)
