@@ -20,6 +20,8 @@ The following tools are used in this app:
 - The _predictive_ model is developed in a notebook in the project. It is a fitted `sklearn` pipeline that we have fitted and pickled to a file.
 - While not shown in this project, I use Postman to check both local and production APIs.
 
+I've documented the setup process for this project separately [here](https://github.com/mike-herman/writings/blob/main/creating_python_fastapi.md).
+
 # Project Organization
 
 Here's how the project is organized. Feel free to browse.
@@ -36,7 +38,7 @@ Here's how the project is organized. Feel free to browse.
 # The Predictive Model
 This was developed off of a Kaggle data set on direct mail. It is one of a few data sets I keep around for general use. You can read more about it and see field definitions [here](https://github.com/mike-herman/credit_datasets). This is a pretty clean dataset to begin with, so cleaning and imputing missing fields wasn't necessary. In most cases though, we would expect to have incomplete information that would require imputation. That would be built into the model.
 
-To make the scenario and analysis more realistic, I madee some assumptions about the costs and benefits. Specifically, I assumed a single direct mailer costs $1 to send and that the average present value of a loan's cashflows is $1,900. When fitting the model, I chose not to use a standard utility metric and instead to explicitly maximize the economic profit. This is done by defining a custom scoring function:
+To make the scenario and analysis more realistic, I madee some assumptions about the costs and benefits. Specifically, I assumed a single direct mailer costs \$1 to send and that the average present value of a loan's cashflows is \$1,900. I also assume a 20% look-to-book ratio (the percent of applications that result in a loan), which translates to an average revenue of \$380 per application. When fitting the model, I chose not to use a standard utility metric and instead to explicitly maximize the economic profit. This is done by defining a custom scoring function:
 ```
 def direct_mail_score_func(y_true, y_proba):
     """ Expected profit from campaign.
