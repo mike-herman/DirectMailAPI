@@ -4,13 +4,12 @@ from pydantic import BaseModel
 from src.data_model import DM_Prediction_Request, DM_Prediction_Response, Prediction
 from src.serve_model import get_prediction
 
-class Item(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-    tax: float | None = None
+import logfire
 
 app = FastAPI()
+
+logfire.configure()
+logfire.instrument_fastapi(app)
 
 @app.get("/")
 def hello():
